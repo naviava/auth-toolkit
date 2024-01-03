@@ -10,8 +10,8 @@ import { Button } from "~/components/ui/button";
 import { DEFAULT_LOGIN_REDIRECT } from "~/routes";
 
 export function Social() {
-  const handleClick = useCallback(async (provider: "google" | "github") => {
-    await signIn(provider, { callbackUrl: DEFAULT_LOGIN_REDIRECT });
+  const handleClick = useCallback((provider: "google" | "github") => {
+    signIn(provider, { callbackUrl: DEFAULT_LOGIN_REDIRECT });
   }, []);
 
   return (
