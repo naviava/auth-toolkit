@@ -21,7 +21,7 @@ import { FormSuccess } from "~/components/form-success";
 import { CardWrapper } from "~/components/auth/card-wrapper";
 
 import { registerSchema } from "~/schemas";
-import { register } from "~/actions/register";
+import { register } from "~/utils/actions/register";
 
 export function RegisterForm() {
   const [error, setError] = useState<string | undefined>("");

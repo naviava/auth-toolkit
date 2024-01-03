@@ -21,7 +21,7 @@ import { FormError } from "~/components/form-error";
 import { FormSuccess } from "~/components/form-success";
 import { CardWrapper } from "~/components/auth/card-wrapper";
 
-import { login } from "~/actions/login";
+import { login } from "~/utils/actions/login";
 import { loginSchema } from "~/schemas";
 
 export function LoginForm() {
