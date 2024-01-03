@@ -4,14 +4,29 @@ import { z } from "zod";
 import { AuthError } from "next-auth";
 
 import { signIn } from "~/auth";
+import { getUserByEmail } from "~/utils/users";
+
 import { loginSchema } from "~/schemas";
 import { DEFAULT_LOGIN_REDIRECT } from "~/routes";
+import { generateVerificationToken } from "~/lib/tokens";
 
 export async function login(values: z.infer<typeof loginSchema>) {
   const validatedFields = loginSchema.safeParse(values);
   if (!validatedFields.success) return { error: "Invalid fields" };
 
   const { email, password } = validatedFields.data;
+  const existingUser = await getUserByEmail(email);
+
+  if (!existingUser || !existingUser.email || !existingUser.password) {
+    return { error: "Email does not exist" };
+  }
+  if (!existingUser.emailVerified) {
+    const verificationToken = await generateVerificationToken(
+      existingUser.email,
+    );
+    return { success: "Confirmation email sent!" };
+  }
+
   try {
     await signIn("credentials", {
       email,
@@ -29,6 +44,4 @@ export async function login(values: z.infer<typeof loginSchema>) {
     }
     throw error;
   }
-
-  return { success: "Email sent!" };
 }
