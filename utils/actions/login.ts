@@ -9,6 +9,7 @@ import { getUserByEmail } from "~/utils/users";
 import { loginSchema } from "~/schemas";
 import { DEFAULT_LOGIN_REDIRECT } from "~/routes";
 import { generateVerificationToken } from "~/lib/tokens";
+import { sendVerificationEmail } from "~/lib/mail";
 
 export async function login(values: z.infer<typeof loginSchema>) {
   const validatedFields = loginSchema.safeParse(values);
@@ -23,6 +24,10 @@ export async function login(values: z.infer<typeof loginSchema>) {
   if (!existingUser.emailVerified) {
     const verificationToken = await generateVerificationToken(
       existingUser.email,
+    );
+    await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token,
     );
     return { success: "Confirmation email sent!" };
   }
