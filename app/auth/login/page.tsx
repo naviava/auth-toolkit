@@ -1,7 +1,5 @@
 import { LoginForm } from "~/components/auth/login-form";
 
-interface IProps {}
-
-export default function LoginPage({}: IProps) {
+export default function LoginPage() {
   return <LoginForm />;
 }
