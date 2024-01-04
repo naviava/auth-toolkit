@@ -39,16 +39,19 @@ export function NewPasswordForm() {
     },
   });
 
-  const onSubmit = useCallback((values: z.infer<typeof newPasswordSchema>) => {
-    setError("");
-    setSuccess("");
-    startTransition(() => {
-      newPassword(values, token).then((data) => {
-        setError(data?.error);
-        setSuccess(data?.success);
+  const onSubmit = useCallback(
+    (values: z.infer<typeof newPasswordSchema>) => {
+      setError("");
+      setSuccess("");
+      startTransition(() => {
+        newPassword(values, token).then((data) => {
+          setError(data?.error);
+          setSuccess(data?.success);
+        });
       });
-    });
-  }, []);
+    },
+    [token],
+  );
 
   return (
     <CardWrapper

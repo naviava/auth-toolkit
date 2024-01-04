@@ -21,3 +21,12 @@ export async function sendPasswordResetEmail(email: string, token: string) {
     html: `<p><a href="${resetLink}">Click here</a> to reset your password.</p>`,
   });
 }
+
+export async function send2FATokenEmail(email: string, token: string) {
+  await resend.emails.send({
+    from: "2fa@fondingo.com",
+    to: email,
+    subject: "Your 2FA code",
+    html: `<p>Your 2FA code is: <strong>${token}</strong></p>`,
+  });
+}
