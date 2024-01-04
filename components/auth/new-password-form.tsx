@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState, useTransition } from "react";
-import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -21,26 +21,29 @@ import { FormError } from "~/components/form-error";
 import { FormSuccess } from "~/components/form-success";
 import { CardWrapper } from "~/components/auth/card-wrapper";
 
-import { resetSchema } from "~/schemas";
-import { reset } from "~/utils/actions/reset";
+import { newPasswordSchema } from "~/schemas";
+import { newPassword } from "~/utils/actions/new-password";
 
-export function ResetForm() {
+export function NewPasswordForm() {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof resetSchema>>({
-    resolver: zodResolver(resetSchema),
+  const form = useForm<z.infer<typeof newPasswordSchema>>({
+    resolver: zodResolver(newPasswordSchema),
     defaultValues: {
-      email: "",
+      password: "",
     },
   });
 
-  const onSubmit = useCallback((values: z.infer<typeof resetSchema>) => {
+  const onSubmit = useCallback((values: z.infer<typeof newPasswordSchema>) => {
     setError("");
     setSuccess("");
     startTransition(() => {
-      reset(values).then((data) => {
+      newPassword(values, token).then((data) => {
         setError(data?.error);
         setSuccess(data?.success);
       });
@@ -49,7 +52,7 @@ export function ResetForm() {
 
   return (
     <CardWrapper
-      headerLabel="Forgot your password?"
+      headerLabel="Enter a new password"
       backButtonLabel="Back to login"
       backButtonHref="/auth/login"
     >
@@ -58,15 +61,15 @@ export function ResetForm() {
           <div className="space-y-4">
             <FormField
               control={form.control}
-              name="email"
+              name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
-                      type="email"
-                      placeholder="yourname@example.com"
+                      type="password"
+                      placeholder="******"
                       disabled={isPending}
                     />
                   </FormControl>
@@ -78,7 +81,7 @@ export function ResetForm() {
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button type="submit" disabled={isPending} className="w-full">
-            Send reset email
+            Reset password
           </Button>
         </form>
       </Form>
