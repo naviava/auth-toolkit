@@ -42,7 +42,7 @@ export async function generatePasswordResetToken(email: string) {
 
 export async function generate2FAToken(email: string) {
   const token = crypto.randomInt(100_000, 1_000_000).toString();
-  const expires = new Date(new Date().getTime() + 900 * 1000);
+  const expires = new Date(new Date().getTime() + 300 * 1000);
 
   const existingToken = await get2FATokenByEmail(email);
   if (!!existingToken) {
