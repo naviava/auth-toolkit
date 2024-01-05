@@ -6,6 +6,7 @@ import { db } from "~/lib/db";
 import authConfig from "~/auth.config";
 import { getUserById } from "~/utils/users";
 import { get2FAConfirmationByUserId } from "./utils/two-factor-confirmation";
+import { getAccountByUserId } from "./utils/account";
 
 export const {
   handlers: { GET, POST },
@@ -58,6 +59,7 @@ export const {
         session.user.name = token.name as string;
         session.user.email = token.email as string;
         session.user.is2FAEnabled = token.is2FAEnabled as boolean;
+        session.user.isOAuth = token.isOAuth as boolean;
       }
       return session;
     },
@@ -65,10 +67,12 @@ export const {
       if (!token.sub) return token;
       const existingUser = await getUserById(token.sub);
       if (!existingUser) return token;
+      const existingAccount = await getAccountByUserId(existingUser.id);
 
       token.name = existingUser.name;
       token.email = existingUser.email;
       token.role = existingUser.role;
+      token.isOAuth = !!existingAccount;
       token.is2FAEnabled = existingUser.is2FAEnabled;
       return token;
     },
