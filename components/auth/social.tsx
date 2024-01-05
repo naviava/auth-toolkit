@@ -8,11 +8,17 @@ import { FaGithub } from "react-icons/fa";
 
 import { Button } from "~/components/ui/button";
 import { DEFAULT_LOGIN_REDIRECT } from "~/routes";
+import { useSearchParams } from "next/navigation";
 
 export function Social() {
-  const handleClick = useCallback((provider: "google" | "github") => {
-    signIn(provider, { callbackUrl: DEFAULT_LOGIN_REDIRECT });
-  }, []);
+  const callbackUrl = useSearchParams().get("callbackUrl");
+
+  const handleClick = useCallback(
+    (provider: "google" | "github") => {
+      signIn(provider, { callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT });
+    },
+    [callbackUrl],
+  );
 
   return (
     <div className="flex w-full items-center gap-x-2">

@@ -3,6 +3,9 @@
 import { memo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
+import { LoginForm } from "~/components/auth/login-form";
+import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
+
 interface IProps {
   children: React.ReactNode;
   mode?: "modal" | "redirect";
@@ -18,7 +21,14 @@ function _LoginButton({ children, asChild, mode = "redirect" }: IProps) {
   }, [router]);
 
   if (mode === "modal") {
-    return <span>{"TODO: Implement modal"}</span>;
+    return (
+      <Dialog>
+        <DialogTrigger asChild={asChild}>{children}</DialogTrigger>
+        <DialogContent className="w-auto border-none bg-transparent p-0">
+          <LoginForm />
+        </DialogContent>
+      </Dialog>
+    );
   }
 
   return (
