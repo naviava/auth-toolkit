@@ -55,6 +55,8 @@ export const {
         session.user.role = token.role as UserRole;
       }
       if (session.user) {
+        session.user.name = token.name as string;
+        session.user.email = token.email as string;
         session.user.is2FAEnabled = token.is2FAEnabled as boolean;
       }
       return session;
@@ -63,6 +65,9 @@ export const {
       if (!token.sub) return token;
       const existingUser = await getUserById(token.sub);
       if (!existingUser) return token;
+
+      token.name = existingUser.name;
+      token.email = existingUser.email;
       token.role = existingUser.role;
       token.is2FAEnabled = existingUser.is2FAEnabled;
       return token;
