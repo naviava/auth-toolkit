@@ -1,8 +1,10 @@
-import { UserInfo } from "~/components/user-info";
-import { currentUser } from "~/lib/auth";
+"use client";
 
-export default async function ServerPage() {
-  const user = await currentUser();
+import { UserInfo } from "~/components/user-info";
+import { useCurrentUser } from "~/hooks/use-current-user";
+
+export default function ServerPage() {
+  const user = useCurrentUser();
 
   return <UserInfo user={user} label="🖥️Server Component" />;
 }
