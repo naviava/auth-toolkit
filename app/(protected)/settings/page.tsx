@@ -3,6 +3,7 @@
 import { useCallback, useState, useTransition } from "react";
 
 import { z } from "zod";
+import { UserRole } from "@prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
@@ -28,13 +29,12 @@ import {
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { Switch } from "~/components/ui/switch";
+import { FormError } from "~/components/form-error";
+import { FormSuccess } from "~/components/form-success";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 
 import { settingsSchema } from "~/schemas";
 import { settings } from "~/utils/actions/settings";
-import { FormError } from "~/components/form-error";
-import { FormSuccess } from "~/components/form-success";
-import { UserRole } from "@prisma/client";
 
 export default function SettingsPage() {
   const { update } = useSession();
